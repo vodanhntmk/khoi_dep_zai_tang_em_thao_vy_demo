@@ -321,25 +321,6 @@ nextBtn.onclick=()=>{
   void fill.offsetWidth;
   fill.classList.add('wave');
   
-  // BẬT TIẾNG NHẠC khi người dùng bấm nút chính lần đầu tiên
-  if(clickCount === 1) {
-      if(audio.muted) {
-          audio.muted = false;
-          audio.play();
-      }
-      unmuteButton.style.display = 'none'; // Đảm bảo ẩn nút bật nhạc thủ công
-  }
-
-  if(clickCount >= requiredClicks){
-    page1.style.opacity='0';
-    page1.style.pointerEvents='none';
-    setTimeout(()=>{
-      page2.style.opacity='1';
-      page2.style.pointerEvents='all';
-      startScene();
-    },1000);
-  }
-};
 
 function startScene(){
   const garden=document.getElementById('garden');
