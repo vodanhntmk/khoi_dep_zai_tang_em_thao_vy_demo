@@ -23,7 +23,7 @@ html,body{
 
 #page1{
   background:linear-gradient(to bottom,#ffd6e7,#fff0f6);
-  /* Sửa page 1 để chứa nút phát nhạc */
+  /* Chỉnh lại Page 1 để căn giữa cả hai nút */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,7 +46,7 @@ button {
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   overflow: hidden;
-  margin-top: 15px; /* Thêm khoảng cách nếu cần */
+  margin-top: 15px; /* Khoảng cách giữa các nút */
 }
 button span { position: relative; z-index: 1; }
 
@@ -144,7 +144,7 @@ button span { position: relative; z-index: 1; }
   position: absolute;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to top, #2e8b57, #58d68d);
+  background: linear-gradient(to top, #2b8a3e, #58d68d);
   border-radius: 2px;
   transform-origin: bottom center;
   opacity: 0.8;
@@ -165,8 +165,6 @@ button span { position: relative; z-index: 1; }
   opacity:0;
   transition:opacity 1s;
   line-height:1.5;
-  width: 90%; /* Để hiển thị tốt hơn trên desktop */
-  max-width: 600px;
 }
 .show{opacity:1;}
 
@@ -182,24 +180,6 @@ button span { position: relative; z-index: 1; }
   0% { transform: translateY(0) scale(1); opacity:1; }
   50% { transform: translateY(-50vh) scale(1.2); opacity:0.8; }
   100% { transform: translateY(-100vh) scale(0.8); opacity:0; }
-}
-
-/* CSS MỚI CHO ẢNH VÀ BỐ CỤC PAGE 2 */
-.profile-image {
-  position: absolute; /* Đặt ảnh ở một vị trí cố định */
-  right: 10%; /* Cách mép phải 10% */
-  bottom: 0; 
-  width: 250px; /* Kích thước ảnh */
-  height: auto;
-  border-radius: 10px 10px 0 0;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-  transform: translateY(100vh); /* Ban đầu ẩn */
-  transition: transform 1.5s ease-out 2s; /* Hiệu ứng trượt lên sau khi cảnh bắt đầu */
-  z-index: 10; /* Đảm bảo ảnh nằm trên */
-}
-
-.profile-image.show-img {
-  transform: translateY(0);
 }
 
 /* 🌸 MEDIA CHO ĐIỆN THOẠI */
@@ -246,12 +226,6 @@ button span { position: relative; z-index: 1; }
   .petal {
     transform: scale(0.8);
   }
-
-  .profile-image {
-    width: 150px; /* Nhỏ hơn trên di động */
-    right: 5%; 
-    bottom: -30px; 
-  }
 }
 
 /* 🌸 MEDIA CHO MÀN HÌNH RẤT NHỎ */
@@ -293,16 +267,15 @@ button span { position: relative; z-index: 1; }
     <span>🌹20/10🌹</span>
     <div class="fill"></div>
   </button>
-  
+
   <button id="unmute-button" style="display:none; margin-top: 15px;">
-    <span>🎶 Bật Nhạc Lên 🎶</span>
+    <span>🎶 Bấm để Nghe Nhạc 🎶</span>
   </button>
 </div>
 
 <div id="page2" class="page">
   <div class="container" id="garden"></div>
   <div class="message" id="message"></div>
-  <img id="profileImage" class="profile-image" src="./images/vy1.jpg" alt="Ảnh Thảo Vy">
 </div>
 
 <audio id="background-music" loop autoplay muted>
@@ -314,26 +287,25 @@ const page1=document.getElementById('page1');
 const page2=document.getElementById('page2');
 const nextBtn=document.getElementById('nextBtn');
 const fill = nextBtn.querySelector('.fill');
-const audio = document.getElementById('background-music');
-const unmuteButton = document.getElementById('unmute-button');
-const profileImage = document.getElementById('profileImage');
+const audio = document.getElementById('background-music'); // Khai báo biến audio
+const unmuteButton = document.getElementById('unmute-button'); // Khai báo nút bật nhạc
 
 const messages = [
-  "Mỗi người phụ nữ là một bông hoa – tỏa hương sắc riêng làm đẹp cho cuộc đời.\nChúc em Thảo Vy luôn rạng rỡ, hạnh phúc, luôn xinh đẹp và mãi yêu anh Khôi nhé. 🌷"
+  "Nay 20/10 Khôi cũng có đôi lời muốn nói, chúc bạn lúc nào cũng ngoan ngoan, hạnh phúc và vui vẻ ko phải lo nghĩ. Ý là cũng chưa quen biết được bao lâu nhưng mà cũng hiểu nhau nói chuyện hợp nhau. Cũng cảm ơn vy vì lúc tui buồn đã quan tâm, an ủi tui. Cũng mong sau này 2 đứa được gặp gỡ nói chuyện với nhau nhiều hơn. Mong Vy lúc nào mọi chuyện cũng suôn sẻ, thực hiện được ước mơ cũng mik hen. Ngại quá trời ơi!!!! 🌷"
 ];
 
 let clickCount=0;
 const requiredClicks=10;
 
-// Xử lý tự động phát nhạc
+// Xử lý tự động phát nhạc khi tải trang
 document.addEventListener('DOMContentLoaded', () => {
     // Cố gắng phát nhạc (ở chế độ tắt tiếng) ngay khi tải trang
     audio.play().catch(error => {
-        // Nếu trình duyệt chặn hoàn toàn (kể cả muted), hiển thị nút bật nhạc
+        // Nếu trình duyệt chặn hoàn toàn, hiển thị nút bật nhạc
         unmuteButton.style.display = 'block';
     });
 
-    // Sự kiện bấm nút Bật Nhạc
+    // Sự kiện bấm nút Bật Nhạc thủ công
     unmuteButton.addEventListener('click', () => {
         audio.muted = false;
         audio.play();
@@ -341,7 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Sự kiện bấm nút chính
 nextBtn.onclick=()=>{
   clickCount++;
   let percent = (clickCount / requiredClicks) * 100;
@@ -350,13 +321,13 @@ nextBtn.onclick=()=>{
   void fill.offsetWidth;
   fill.classList.add('wave');
   
-  // Bật tiếng nhạc ngay khi người dùng bấm nút chính lần đầu tiên
+  // BẬT TIẾNG NHẠC khi người dùng bấm nút chính lần đầu tiên
   if(clickCount === 1) {
       if(audio.muted) {
           audio.muted = false;
           audio.play();
       }
-      unmuteButton.style.display = 'none'; // Ẩn nút bật nhạc nếu nó đang hiển thị
+      unmuteButton.style.display = 'none'; // Đảm bảo ẩn nút bật nhạc thủ công
   }
 
   if(clickCount >= requiredClicks){
@@ -490,8 +461,6 @@ function startScene(){
     const message=document.getElementById('message');
     message.textContent=messages[0];
     message.classList.add('show');
-    // Ảnh trượt lên sau khi cảnh bắt đầu
-    profileImage.classList.add('show-img'); 
   },2000);
 }
 </script>
